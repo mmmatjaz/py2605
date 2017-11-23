@@ -59,7 +59,7 @@ class Ar2c:
 
     def play(self,driver,sample,repeat):
         cmd="play;{};{};{};".format(driver,sample,repeat)
-        print cmd
+        #print cmd
         res=self.sendCmd(cmd)
         print res
 

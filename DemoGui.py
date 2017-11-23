@@ -1,3 +1,4 @@
+import argparse
 from Tkinter import *
 
 from Ar2c import Ar2c
@@ -9,9 +10,9 @@ isLRA = [0, 0, 0]
 
 
 class DemoGui:
-    def __init__(self):
+    def __init__(self, port):
 
-        self.ar2c = Ar2c()
+        self.ar2c = Ar2c(serialPort=port)
         self.ar2c.setupTypes(isLRA)
 
         self.root = Tk()
@@ -25,7 +26,7 @@ class DemoGui:
         self.pats = dict((v, k) for k, v in patternNames.iteritems())
         # set the default option
         self.tkvar.set(patternNames[44])
-        popupMenu = OptionMenu(self.root, self.tkvar, *self.pats)
+        popupMenu = OptionMenu(self.root, self.tkvar, *patternNames.values())
         popupMenu.grid(row=1, columnspan=len(BOARDS)+1, pady=5)
         # link function to change dropdown
         self.tkvar.trace('w', self.changeDropdown)
@@ -64,6 +65,11 @@ class DemoGui:
         self.root.mainloop()
 
 if __name__ == "__main__":
-    print "start ui"
-    g = DemoGui()
+    parser = argparse.ArgumentParser(description='Demo')
+    parser.add_argument('-p', required=True, action="store", dest="port",
+                        default='COM5',
+                        help='set port. example python DemoGui.py -n COM5')
+
+    port = parser.parse_args().port
+    g = DemoGui(port)
     g.start()
